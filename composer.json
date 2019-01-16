@@ -1,0 +1,41 @@
+{
+    "name": "janiskelemen/laravel-setting",
+    "description": "Laravel Settings Manager",
+    "license": "MIT",
+    "authors": [{
+        "name": "Janis Kelemen",
+        "email": "jak@spacemates.io",
+        "homepage": "https://spacemates.io"
+    }],
+    "homepage": "https://github.com/janiskelemen/laravel-setting",
+    "keywords": ["Laravel", "Setting", "Config", "JanisKelemen"],
+    "require": {
+        "illuminate/support": "~5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JanisKelemen\\Setting\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JanisKelemen\\Setting\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JanisKelemen\\Setting\\Providers\\SettingServiceProvider"
+            ],
+            "aliases": {
+                "Setting": "JanisKelemen\\Setting\\Facades\\Setting"
+            }
+        }
+    }
+}
