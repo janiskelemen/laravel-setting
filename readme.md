@@ -15,14 +15,14 @@
 Via Composer
 
 ```bash
-$ composer require janiskelemen/laravel-setting
+composer require janiskelemen/laravel-setting
 ```
 
 ## Publish config and migration
 
 ```bash
-$ php artisan vendor:publish --tag=setting
-$ php artisan migrate
+php artisan vendor:publish --tag=setting
+php artisan migrate
 ```
 
 ## Setup your settings config
@@ -80,7 +80,7 @@ If you want to store additional data for a particular setting you can do so usin
     //retruns 'My Application'
 
     // You can still access the optional parameters
-    $setting::get('app_name.max')
+    Setting::get('app_name.max')
     //retruns 255
 ```
 
