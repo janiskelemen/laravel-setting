@@ -1,6 +1,5 @@
 # Advanced Settings Manager for Laravel
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Build Status][ico-travis]][link-travis]
 [![StyleCI][ico-styleci]][link-styleci]
@@ -186,7 +185,6 @@ This package is mostly a fork of [UniSharp/laravel-settings](https://github.com/
 
 MIT. Please see the [license file](LICENSE) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/janiskelemen/laravel-setting.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/janiskelemen/laravel-setting.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/janiskelemen/laravel-setting/master.svg?style=flat-square
 [ico-styleci]: https://github.styleci.io/repos/166064246/shield?branch=master
