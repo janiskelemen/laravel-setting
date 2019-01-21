@@ -86,11 +86,13 @@ Please see [contributing.md](contributing.md) for details and a todolist.
 
 ## Security
 
-If you discover any security related issues, please email jak@spacemates.io instead of using the issue tracker.
+If you discover any security related issues, please send me a DM on Twitter [Janis Kelemen][https://twitter.com/janiskelemen] instead of using the issue tracker.
 
 ## Credits
 
--   [Janis Kelemen][link-author]
+This package is mostly a fork of [UniSharp/laravel-settings](https://github.com/UniSharp/laravel-settings)
+
+-   [Janis Kelemen][https://twitter.com/janiskelemen]
 -   [All Contributors][link-contributors]
 
 ## License
@@ -100,11 +102,11 @@ MIT. Please see the [license file](license.md) for more information.
 [ico-version]: https://img.shields.io/packagist/v/janiskelemen/laravel-setting.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/janiskelemen/laravel-setting.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/janiskelemen/laravel-setting/master.svg?style=flat-square
-[ico-styleci]: https://styleci.io/repos/12345678/shield
+[ico-styleci]: https://github.styleci.io/repos/166064246/shield?branch=master
 [link-packagist]: https://packagist.org/packages/janiskelemen/laravel-setting
 [link-downloads]: https://packagist.org/packages/janiskelemen/laravel-setting
 [link-travis]: https://travis-ci.org/janiskelemen/laravel-setting
-[link-styleci]: https://styleci.io/repos/12345678
+[link-styleci]: https://github.styleci.io/repos/166064246
 [link-author]: https://github.com/janiskelemen
 
 [link-contributors]: ../../contributors]
