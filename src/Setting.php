@@ -22,7 +22,7 @@ class Setting
     {
         $configSettings = collect(config('setting'));
         $configSettings->transform(function ($item, $key) {
-            return is_array($item) && isset($item['default']) ? $item['default'] : $item;
+            return is_array($item) && isset($item['default_value']) ? $item['default_value'] : $item;
         });
         $all = $this->storage->whereLocale(null)->get()->pluck('value', 'key');
 
@@ -36,7 +36,7 @@ class Setting
      */
     public function default($key)
     {
-        return is_array(config('setting.'.$key)) ? config('setting.'.$key.'.default') : config('setting.'.$key);
+        return is_array(config('setting.'.$key)) ? config('setting.'.$key.'.default_value') : config('setting.'.$key);
     }
 
     /**

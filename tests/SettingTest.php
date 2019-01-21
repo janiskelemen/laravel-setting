@@ -37,7 +37,7 @@ class SettingTest extends TestCase
         $app['config']->set('setting.version', '1.0');
         $app['config']->set('setting.app_name', [
             'type' => 'text',
-            'default' => 'My Application',
+            'default_value' => 'My Application',
         ]);
     }
 
@@ -174,6 +174,21 @@ class SettingTest extends TestCase
         $setting->set('app_name', 'Test Application');
 
         $this->assertSame('Test Application', $setting->get('app_name'));
+    }
+
+    /**
+     * @test
+     */
+    public function getOptionalAttributeFromConfigFile()
+    {
+        $cache = Mockery::mock(CacheContract::class);
+        $cache->shouldReceive('has')->andReturn(false);
+        $cache->shouldReceive('add')->andReturn(true);
+
+        $setting = new Setting(new EloquentStorage(), $cache);
+
+        // Get setting from setting config file
+        $this->assertSame('text', $setting->get('app_name.type'));
     }
 
     /**

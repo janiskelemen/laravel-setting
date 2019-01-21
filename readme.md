@@ -25,6 +25,90 @@ $ php artisan vendor:publish --tag=setting
 $ php artisan migrate
 ```
 
+## Setup your settings config
+
+After publishing the setting files you will find a new configuration file: config/setting.php
+In this config you can define your basic settings like below.
+
+```php
+    return [
+        'app_name' => 'My Application',
+        'user_limit' => 10,
+    ];
+```
+
+```php
+    Setting::get('app_name');
+    //retruns 'My Application'
+```
+
+### You can also use multi level arrays
+
+```php
+    return [
+        'priorities' => [
+            'low' => 1,
+            'medium' => 2,
+            'hight' => 3
+        ],
+    ];
+```
+
+```php
+    Setting::get('priorities.medium');
+    //retruns 2
+```
+
+### Defining optional config values
+
+If you want to store additional data for a particular setting you can do so using an array and name one of the parameters
+'default_value' which will be the default for the setting and is what gets returned by Settings::get('app_name') in this case.
+
+```php
+    return [
+        'app_name' => [
+            'type' => 'text', /* Optional config values */
+            'max' => 255, /* Optional config values */
+            'default_value' => 'My Application' /* <- This value will be returned by Setting::get('app_name') if key is not found in DB */
+        ],
+        'user_limit' => 10,
+    ];
+```
+
+```php
+    Setting::get('app_name');
+    //retruns 'My Application'
+
+    // You can still access the optional parameters
+    $setting::get('app_name.max')
+    //retruns 255
+```
+
+### Scoped settings
+
+You might want to save some settings only for a certain users. You can do this using a multi array.
+Those setting naturally wont life your config file but can be saved during runtime into the Database.
+
+Set save the new setting on runtime:
+
+```php
+    // Save a new setting under user1.dark_mode
+    Setting::set('user' . $user->id . '.dark_mode', true);
+```
+
+Now you can get the value:
+
+```php
+    Setting::get('user' . $user->id . '.dark_mode');
+```
+
+The above will return null if the setting does not exist for this user.
+In order to return something else you can set a default as the second parameter:
+
+```php
+    Setting::get('user' . $user->id . '.dark_mode', false);
+```
+
 ## Usage
 
 ```php
@@ -82,7 +166,7 @@ $ composer test
 
 ## Contributing
 
-Please see [contributing.md](contributing.md) for details and a todolist.
+Please see [contributing.md](contributing.md) for details.
 
 ## Security
 
@@ -97,7 +181,7 @@ This package is mostly a fork of [UniSharp/laravel-settings](https://github.com/
 
 ## License
 
-MIT. Please see the [license file](license.md) for more information.
+MIT. Please see the [license file](LICENSE) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/janiskelemen/laravel-setting.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/janiskelemen/laravel-setting.svg?style=flat-square
