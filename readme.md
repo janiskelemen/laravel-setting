@@ -31,32 +31,32 @@ After publishing the setting files you will find a new configuration file: confi
 In this config you can define your basic settings like below.
 
 ```php
-    return [
-        'app_name' => 'My Application',
-        'user_limit' => 10,
-    ];
+return [
+    'app_name' => 'My Application',
+    'user_limit' => 10,
+];
 ```
 
 ```php
-    Setting::get('app_name');
-    //retruns 'My Application'
+Setting::get('app_name');
+//retruns 'My Application'
 ```
 
 ### You can also use multi level arrays
 
 ```php
-    return [
-        'priorities' => [
-            'low' => 1,
-            'medium' => 2,
-            'hight' => 3
-        ],
-    ];
+return [
+    'priorities' => [
+        'low' => 1,
+        'medium' => 2,
+        'hight' => 3
+    ],
+];
 ```
 
 ```php
-    Setting::get('priorities.medium');
-    //retruns 2
+Setting::get('priorities.medium');
+//retruns 2
 ```
 
 ### Defining optional config values
@@ -65,23 +65,23 @@ If you want to store additional data for a particular setting you can do so usin
 'default_value' which will be the default for the setting and is what gets returned by Settings::get('app_name') in this case.
 
 ```php
-    return [
-        'app_name' => [
-            'type' => 'text', /* Optional config values */
-            'max' => 255, /* Optional config values */
-            'default_value' => 'My Application' /* <- This value will be returned by Setting::get('app_name') if key is not found in DB */
-        ],
-        'user_limit' => 10,
-    ];
+return [
+    'app_name' => [
+        'type' => 'text', /* Optional config values */
+        'max' => 255, /* Optional config values */
+        'default_value' => 'My Application' /* <- This value will be returned by Setting::get('app_name') if key is not found in DB */
+    ],
+    'user_limit' => 10,
+];
 ```
 
 ```php
-    Setting::get('app_name');
-    //retruns 'My Application'
+Setting::get('app_name');
+//retruns 'My Application'
 
-    // You can still access the optional parameters
-    Setting::get('app_name.max')
-    //retruns 255
+// You can still access the optional parameters
+Setting::get('app_name.max')
+//retruns 255
 ```
 
 ### Scoped settings
@@ -92,21 +92,23 @@ Those setting naturally wont life your config file but can be saved during runti
 Set save the new setting on runtime:
 
 ```php
-    // Save a new setting under user1.dark_mode
-    Setting::set('user' . $user->id . '.dark_mode', true);
+// Save a new setting under user1.dark_mode with a value of true
+Setting::set('user' . $user->id . '.dark_mode', true);
 ```
 
 Now you can get the value:
 
 ```php
-    Setting::get('user' . $user->id . '.dark_mode');
+Setting::get('user' . $user->id . '.dark_mode');
+//returns true
 ```
 
 The above will return null if the setting does not exist for this user.
 In order to return something else you can set a default as the second parameter:
 
 ```php
-    Setting::get('user' . $user->id . '.dark_mode', false);
+Setting::get('user' . $otherUser->id . '.dark_mode', false);
+//returns false
 ```
 
 ## Usage
