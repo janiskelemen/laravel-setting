@@ -10,6 +10,7 @@ interface SettingStorageContract
      * @return array
      */
     public static function all();
+
     /**
      * Return setting value or default value by key.
      *
@@ -19,6 +20,7 @@ interface SettingStorageContract
      * @return string
      */
     public function retrieve($key, $lang = null);
+
     /**
      * Set the setting by key and value.
      *
@@ -28,6 +30,7 @@ interface SettingStorageContract
      * @return void
      */
     public function store($key, $value, $lang);
+
     /**
      * Check if the setting exists.
      *
@@ -36,6 +39,7 @@ interface SettingStorageContract
      * @return bool
      */
     public function modify($key, $value, $lang);
+
     /**
      * Delete a setting.
      *

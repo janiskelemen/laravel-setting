@@ -10,7 +10,6 @@ use Illuminate\Contracts\Cache\Factory as CacheContract;
 
 class SettingTest extends TestCase
 {
-
     /**
      * Setup the test environment.
      */
@@ -18,7 +17,7 @@ class SettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     protected function getPackageProviders($app)
@@ -38,7 +37,7 @@ class SettingTest extends TestCase
         $app['config']->set('setting.version', '1.0');
         $app['config']->set('setting.app_name', [
             'type' => 'text',
-            'default' => 'My Application'
+            'default' => 'My Application',
         ]);
     }
 
@@ -74,6 +73,7 @@ class SettingTest extends TestCase
 
         $this->assertSame('value', $setting->get('key'));
     }
+
     /**
      * @test
      */
@@ -95,6 +95,7 @@ class SettingTest extends TestCase
         $this->assertSame('val2c', $setting->get('key2.c'));
         $this->assertSame(['c' => 'val2c'], $setting->get('key2'));
     }
+
     /**
      * @test
      */
@@ -111,6 +112,7 @@ class SettingTest extends TestCase
         $this->assertSame('val1', $setting->lang('lang1')->get('key'));
         $this->assertNull($setting->get('key'));
     }
+
     /**
      * @test
      */
@@ -131,6 +133,7 @@ class SettingTest extends TestCase
 
         $this->assertNull($setting->get('key'));
     }
+
     /**
      * @test
      */
@@ -153,6 +156,7 @@ class SettingTest extends TestCase
         $this->assertSame('value-a', $setting->get('key2.a', 'new-value'));
         $this->assertSame('new-value', $setting->get('key2.b', 'new-value'));
     }
+
     /**
      * @test
      */
@@ -171,6 +175,7 @@ class SettingTest extends TestCase
 
         $this->assertSame('Test Application', $setting->get('app_name'));
     }
+
     /**
      * @test
      */
@@ -187,6 +192,7 @@ class SettingTest extends TestCase
 
         $this->assertSame('Test Application', $setting->all()->get('app_name'));
     }
+
     /**
      * @test
      */
@@ -202,6 +208,7 @@ class SettingTest extends TestCase
 
         $this->assertFalse(is_array($setting->get('app_name')));
     }
+
     /**
      * @test
      */
