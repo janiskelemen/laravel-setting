@@ -86,13 +86,13 @@ Please see [contributing.md](contributing.md) for details and a todolist.
 
 ## Security
 
-If you discover any security related issues, please send me a DM on Twitter [Janis Kelemen][https://twitter.com/janiskelemen] instead of using the issue tracker.
+If you discover any security related issues, please send me a DM on Twitter [@janiskelemen](https://twitter.com/janiskelemen) instead of using the issue tracker.
 
 ## Credits
 
 This package is mostly a fork of [UniSharp/laravel-settings](https://github.com/UniSharp/laravel-settings)
 
--   [Janis Kelemen][https://twitter.com/janiskelemen]
+-   [Janis Kelemen](https://twitter.com/janiskelemen)
 -   [All Contributors][link-contributors]
 
 ## License
