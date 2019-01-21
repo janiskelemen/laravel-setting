@@ -8,6 +8,7 @@
 -   Simple key-value storage
 -   Optional config file for default settings supported
 -   Support multi-level array (dot delimited keys) structure
+-   Supports storing individual user settings
 -   Localization supported
 
 ## Installation
