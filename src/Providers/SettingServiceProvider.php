@@ -3,8 +3,6 @@
 namespace JanisKelemen\Setting\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use JanisKelemen\Setting\EloquentStorage;
-use JanisKelemen\Setting\Contracts\SettingStorageContract;
 
 class SettingServiceProvider extends ServiceProvider
 {
@@ -45,6 +43,4 @@ class SettingServiceProvider extends ServiceProvider
         $this->app->bind('Setting', \JanisKelemen\Setting\Setting::class);
         $this->app->bind(\JanisKelemen\Setting\Contracts\SettingStorageContract::class, \JanisKelemen\Setting\EloquentStorage::class);
     }
-
-
 }
