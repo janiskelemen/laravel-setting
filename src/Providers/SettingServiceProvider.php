@@ -42,31 +42,9 @@ class SettingServiceProvider extends ServiceProvider
         'setting'
         );
         // Register the service the package provides.
-        $this->app->singleton('setting', function ($app) {
-            return new Setting;
-        });
-        $this->app->bind(SettingStorageContract::class, EloquentStorage::class);
+        $this->app->bind('Setting', \JanisKelemen\Setting\Setting::class);
+        $this->app->bind(\JanisKelemen\Setting\Contracts\SettingStorageContract::class, \JanisKelemen\Setting\EloquentStorage::class);
     }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['setting'];
-    }
 
-    /**
-     * Console-specific booting.
-     *
-     * @return void
-     */
-    protected function bootForConsole()
-    {
-
-        // Registering package commands.
-        // $this->commands([]);
-    }
 }
