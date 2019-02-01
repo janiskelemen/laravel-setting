@@ -21,11 +21,6 @@ class SettingServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../config/setting.php' => config_path('setting.php'),
         ], 'setting');
-
-        // Publishing is only necessary when using the CLI.
-        if ($this->app->runningInConsole()) {
-            $this->bootForConsole();
-        }
     }
 
     /**
