@@ -182,7 +182,7 @@ class Setting
             if (is_array($setting_array)) {
                 $setting = $setting_array;
             }
-            $this->cache->add($main_key.'@'.$this->lang, $setting, 1);
+            $this->cache->add($main_key.'@'.$this->lang, $setting, 60);
         }
 
         return $setting;
