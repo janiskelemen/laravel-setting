@@ -4,8 +4,8 @@
     "license": "MIT",
     "authors": [{
         "name": "Janis Kelemen",
-        "email": "jak@spacemates.io",
-        "homepage": "https://spacemates.io"
+        "email": "jak@helpspace.io",
+        "homepage": "https://helpspace.io"
     }],
     "homepage": "https://github.com/janiskelemen/laravel-setting",
     "keywords": ["Laravel", "Setting", "Config", "JanisKelemen"],
@@ -16,6 +16,7 @@
         "phpunit/phpunit": "^5.7|6.2|^7.0,^8.0",
         "mockery/mockery": "^1.1",
         "orchestra/testbench": "~3.0",
+        "orchestra/database": "~3.0",
         "sempro/phpunit-pretty-print": "^1.0"
     },
     "autoload": {
