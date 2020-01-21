@@ -2,11 +2,11 @@
 
 namespace Tests;
 
-use Mockery;
-use JanisKelemen\Setting\Setting;
-use Orchestra\Testbench\TestCase;
-use JanisKelemen\Setting\EloquentStorage;
 use Illuminate\Contracts\Cache\Factory as CacheContract;
+use JanisKelemen\Setting\EloquentStorage;
+use JanisKelemen\Setting\Setting;
+use Mockery;
+use Orchestra\Testbench\TestCase;
 
 class SettingTest extends TestCase
 {
@@ -17,14 +17,14 @@ class SettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     protected function getPackageProviders($app)
     {
         return [
             'JanisKelemen\Setting\Providers\SettingServiceProvider',
-            \Orchestra\Database\ConsoleServiceProvider::class
+            \Orchestra\Database\ConsoleServiceProvider::class,
         ];
     }
 
