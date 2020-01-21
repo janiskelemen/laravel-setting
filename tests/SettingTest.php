@@ -17,12 +17,15 @@ class SettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 
     protected function getPackageProviders($app)
     {
-        return ['JanisKelemen\Setting\Providers\SettingServiceProvider'];
+        return [
+            'JanisKelemen\Setting\Providers\SettingServiceProvider',
+            \Orchestra\Database\ConsoleServiceProvider::class
+        ];
     }
 
     /**

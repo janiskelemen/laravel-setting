@@ -2,13 +2,20 @@
     "name": "janiskelemen/laravel-setting",
     "description": "Laravel Settings Manager",
     "license": "MIT",
-    "authors": [{
-        "name": "Janis Kelemen",
-        "email": "jak@helpspace.io",
-        "homepage": "https://helpspace.io"
-    }],
+    "authors": [
+        {
+            "name": "Janis Kelemen",
+            "email": "janis@helpspace.io",
+            "homepage": "https://helpspace.io"
+        }
+    ],
     "homepage": "https://github.com/janiskelemen/laravel-setting",
-    "keywords": ["Laravel", "Setting", "Config", "JanisKelemen"],
+    "keywords": [
+        "Laravel",
+        "Setting",
+        "Config",
+        "JanisKelemen"
+    ],
     "require": {
         "illuminate/support": "~5|~6"
     },
@@ -38,5 +45,8 @@
                 "Setting": "JanisKelemen\\Setting\\Facades\\Setting"
             }
         }
+    },
+    "scripts": {
+        "test": "phpunit --testdox"
     }
 }
