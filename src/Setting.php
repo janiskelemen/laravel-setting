@@ -18,6 +18,11 @@ class Setting
         $this->cache = $cache;
     }
 
+    /**
+     * Get all settings from database and merge into default config.
+     *
+     * @return Collection
+     */
     public function all()
     {
         $configSettings = collect(config('setting'));
@@ -34,9 +39,10 @@ class Setting
      *
      * @return void
      */
-    public function default($key)
+    public function
+    default($key)
     {
-        return is_array(config('setting.'.$key)) ? config('setting.'.$key.'.default_value') : config('setting.'.$key);
+        return is_array(config('setting.' . $key)) ? config('setting.' . $key . '.default_value') : config('setting.' . $key);
     }
 
     /**
@@ -171,18 +177,18 @@ class Setting
         } else {
             $main_key = $key;
         }
-        if ($this->cache->has($main_key.'@'.$this->lang)) {
-            $setting = $this->cache->get($main_key.'@'.$this->lang);
+        if ($this->cache->has($main_key . '@' . $this->lang)) {
+            $setting = $this->cache->get($main_key . '@' . $this->lang);
         } else {
             $setting = $this->storage->retrieve($main_key, $this->lang);
-            if (! is_null($setting)) {
+            if (!is_null($setting)) {
                 $setting = $setting->value;
             }
             $setting_array = json_decode($setting, true);
             if (is_array($setting_array)) {
                 $setting = $setting_array;
             }
-            $this->cache->add($main_key.'@'.$this->lang, $setting, 60);
+            $this->cache->add($main_key . '@' . $this->lang, $setting, 60);
         }
 
         return $setting;
@@ -199,18 +205,24 @@ class Setting
         } else {
             $this->storage->store($main_key, $value, $this->lang);
         }
-        if ($this->cache->has($main_key.'@'.$this->lang)) {
-            $this->cache->forget($main_key.'@'.$this->lang);
+        if ($this->cache->has($main_key . '@' . $this->lang)) {
+            $this->cache->forget($main_key . '@' . $this->lang);
         }
     }
 
+    /**
+     * Check if key exists
+     *
+     * @param String $key
+     * @return boolean
+     */
     protected function hasByKey($key)
     {
         if (strpos($key, '.') !== false) {
             $setting = $this->getSubValue($key);
         } else {
-            if ($this->cache->has($key.'@'.$this->lang)) {
-                $setting = $this->cache->get($key.'@'.$this->lang);
+            if ($this->cache->has($key . '@' . $this->lang)) {
+                $setting = $this->cache->get($key . '@' . $this->lang);
             } else {
                 $setting = $this->storage->retrieve($key, $this->lang);
             }
@@ -219,12 +231,24 @@ class Setting
         return ($setting === null) ? false : true;
     }
 
+    /**
+     * Remove key from db and cache
+     *
+     * @param String $key
+     * @return void
+     */
     protected function forgetByKey($key)
     {
         $this->storage->forget($key, $this->lang);
-        $this->cache->forget($key.'@'.$this->lang);
+        $this->cache->forget($key . '@' . $this->lang);
     }
 
+    /**
+     * Get sub value
+     *
+     * @param String $key
+     * @return void
+     */
     protected function getSubValue($key)
     {
         $setting = $this->getByKey($key);
@@ -234,6 +258,12 @@ class Setting
         return $setting;
     }
 
+    /**
+     * Set sub value
+     *
+     * @param String $key
+     * @return void
+     */
     protected function setSubValue($key, $new_value)
     {
         $setting = $this->getByKey($key);
@@ -242,6 +272,12 @@ class Setting
         $this->setByKey($key, $setting);
     }
 
+    /**
+     * Remove sub value
+     *
+     * @param String $key
+     * @return void
+     */
     protected function forgetSubKey($key)
     {
         $setting = $this->getByKey($key);
@@ -250,6 +286,12 @@ class Setting
         $this->setByKey($key, $setting);
     }
 
+    /**
+     * Remove main key
+     *
+     * @param String $key
+     * @return String
+     */
     protected function removeMainKey($key)
     {
         $pos = strpos($key, '.');

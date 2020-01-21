@@ -11,10 +11,17 @@ class EloquentStorage extends Eloquent implements SettingStorageContract
     protected $table = 'settings';
     public $timestamps = false;
 
+    /**
+     * Get setting from database
+     *
+     * @param String $key
+     * @param String $lang
+     * @return void
+     */
     public function retrieve($key, $lang = null)
     {
         $setting = static::where('key', $key);
-        if (! is_null($lang)) {
+        if (!is_null($lang)) {
             $setting = $setting->where('locale', $lang);
         } else {
             $setting = $setting->whereNull('locale');
@@ -23,18 +30,34 @@ class EloquentStorage extends Eloquent implements SettingStorageContract
         return $setting->first();
     }
 
+    /**
+     * Save setting to database
+     *
+     * @param String $key
+     * @param String|Array $value
+     * @param String $lang
+     * @return void
+     */
     public function store($key, $value, $lang)
     {
         $setting = ['key' => $key, 'value' => $value];
-        if (! is_null($lang)) {
+        if (!is_null($lang)) {
             $setting['locale'] = $lang;
         }
         static::create($setting);
     }
 
+    /**
+     * Change setting in database
+     *
+     * @param String $key
+     * @param String|Array $value
+     * @param String $lang
+     * @return void
+     */
     public function modify($key, $value, $lang)
     {
-        if (! is_null($lang)) {
+        if (!is_null($lang)) {
             $setting = static::where('locale', $lang);
         } else {
             $setting = new static();
@@ -42,10 +65,17 @@ class EloquentStorage extends Eloquent implements SettingStorageContract
         $setting->where('key', $key)->update(['value' => $value]);
     }
 
+    /**
+     * Delete setting from database
+     *
+     * @param String $key
+     * @param String $lang
+     * @return void
+     */
     public function forget($key, $lang)
     {
         $setting = static::where('key', $key);
-        if (! is_null($lang)) {
+        if (!is_null($lang)) {
             $setting = $setting->where('locale', $lang);
         } else {
             $setting = $setting->whereNull('locale');
