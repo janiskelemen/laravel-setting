@@ -39,10 +39,9 @@ class Setting
      *
      * @return void
      */
-    public function
-    default($key)
+    public function default($key)
     {
-        return is_array(config('setting.' . $key)) ? config('setting.' . $key . '.default_value') : config('setting.' . $key);
+        return is_array(config('setting.'.$key)) ? config('setting.'.$key.'.default_value') : config('setting.'.$key);
     }
 
     /**
@@ -177,18 +176,18 @@ class Setting
         } else {
             $main_key = $key;
         }
-        if ($this->cache->has($main_key . '@' . $this->lang)) {
-            $setting = $this->cache->get($main_key . '@' . $this->lang);
+        if ($this->cache->has($main_key.'@'.$this->lang)) {
+            $setting = $this->cache->get($main_key.'@'.$this->lang);
         } else {
             $setting = $this->storage->retrieve($main_key, $this->lang);
-            if (!is_null($setting)) {
+            if (! is_null($setting)) {
                 $setting = $setting->value;
             }
             $setting_array = json_decode($setting, true);
             if (is_array($setting_array)) {
                 $setting = $setting_array;
             }
-            $this->cache->add($main_key . '@' . $this->lang, $setting, 60);
+            $this->cache->add($main_key.'@'.$this->lang, $setting, 60);
         }
 
         return $setting;
@@ -205,24 +204,24 @@ class Setting
         } else {
             $this->storage->store($main_key, $value, $this->lang);
         }
-        if ($this->cache->has($main_key . '@' . $this->lang)) {
-            $this->cache->forget($main_key . '@' . $this->lang);
+        if ($this->cache->has($main_key.'@'.$this->lang)) {
+            $this->cache->forget($main_key.'@'.$this->lang);
         }
     }
 
     /**
-     * Check if key exists
+     * Check if key exists.
      *
-     * @param String $key
-     * @return boolean
+     * @param string $key
+     * @return bool
      */
     protected function hasByKey($key)
     {
         if (strpos($key, '.') !== false) {
             $setting = $this->getSubValue($key);
         } else {
-            if ($this->cache->has($key . '@' . $this->lang)) {
-                $setting = $this->cache->get($key . '@' . $this->lang);
+            if ($this->cache->has($key.'@'.$this->lang)) {
+                $setting = $this->cache->get($key.'@'.$this->lang);
             } else {
                 $setting = $this->storage->retrieve($key, $this->lang);
             }
@@ -232,21 +231,21 @@ class Setting
     }
 
     /**
-     * Remove key from db and cache
+     * Remove key from db and cache.
      *
-     * @param String $key
+     * @param string $key
      * @return void
      */
     protected function forgetByKey($key)
     {
         $this->storage->forget($key, $this->lang);
-        $this->cache->forget($key . '@' . $this->lang);
+        $this->cache->forget($key.'@'.$this->lang);
     }
 
     /**
-     * Get sub value
+     * Get sub value.
      *
-     * @param String $key
+     * @param string $key
      * @return void
      */
     protected function getSubValue($key)
@@ -259,9 +258,9 @@ class Setting
     }
 
     /**
-     * Set sub value
+     * Set sub value.
      *
-     * @param String $key
+     * @param string $key
      * @return void
      */
     protected function setSubValue($key, $new_value)
@@ -273,9 +272,9 @@ class Setting
     }
 
     /**
-     * Remove sub value
+     * Remove sub value.
      *
-     * @param String $key
+     * @param string $key
      * @return void
      */
     protected function forgetSubKey($key)
@@ -287,10 +286,10 @@ class Setting
     }
 
     /**
-     * Remove main key
+     * Remove main key.
      *
-     * @param String $key
-     * @return String
+     * @param string $key
+     * @return string
      */
     protected function removeMainKey($key)
     {
