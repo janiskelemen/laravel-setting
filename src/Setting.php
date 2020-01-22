@@ -76,7 +76,7 @@ class Setting
     }
 
     /**
-     * Recursivly merge array values of a given key with config file values
+     * Recursivly merge array values of a given key with config file values.
      *
      * @param string $key
      * @param mixed  $value
@@ -85,19 +85,20 @@ class Setting
      */
     public function mergeValues($key, $value)
     {
-        $setting = config('setting.' . $key);
+        $setting = config('setting.'.$key);
 
-        if (!is_array($setting)) {
+        if (! is_array($setting)) {
             return false;
         }
         if (array_key_exists('default_value', $setting)) {
             $setting['value'] = $value;
+
             return $setting;
         }
 
         foreach ($setting as $subkey => $value) {
             if (array_key_exists('default_value', $value)) {
-                $setting[$subkey]['value'] = $this->get($key . '.' . $subkey);
+                $setting[$subkey]['value'] = $this->get($key.'.'.$subkey);
             }
         }
 
