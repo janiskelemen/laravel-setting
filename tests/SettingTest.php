@@ -17,7 +17,7 @@ class SettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     protected function getPackageProviders($app)
@@ -211,20 +211,19 @@ class SettingTest extends TestCase
             'setting.fields' => [
                 'field1' => [
                     'type' => 'input',
-                    'default_value' => 'field 1 not set'
+                    'default_value' => 'field 1 not set',
                 ],
                 'field2' => [
                     'type' => 'input',
-                    'default_value' => 'field 2 not set'
-                ]
-            ]
+                    'default_value' => 'field 2 not set',
+                ],
+            ],
         ]);
         $cache = Mockery::mock(CacheContract::class);
         $cache->shouldReceive('has')->andReturn(false);
         $cache->shouldReceive('add')->andReturn(true);
 
         $setting = new Setting(new EloquentStorage(), $cache);
-
 
         $setting->set('fields.field1', 'field 1 overwrite');
 
