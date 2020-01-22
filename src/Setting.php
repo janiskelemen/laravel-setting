@@ -42,7 +42,7 @@ class Setting
     public function
     default($key)
     {
-        return is_array(config('setting.' . $key)) ? config('setting.' . $key . '.default_value', 'setting.' . $key) : config('setting.' . $key);
+        return is_array(config('setting.' . $key)) ? config('setting.' . $key . '.default_value', config('setting.' . $key)) : config('setting.' . $key);
     }
 
     /**
