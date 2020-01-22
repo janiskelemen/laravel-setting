@@ -82,6 +82,16 @@ Setting::get('app_name');
 // You can still access the optional parameters
 Setting::get('app_name.max')
 //retruns 255
+
+// This will return all parameters including the current value
+Setting::get('app_name.')
+//retruns
+//    [
+//        'type' => 'text',
+//        'max' => 255,
+//        'default_value' => 'My Application',
+//        'value' => 'My Custom Application Name' //the value key will be added with the current value saved in the database (or default if not in database yet)
+//    ],
 ```
 
 ### Scoped settings

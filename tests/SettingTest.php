@@ -17,7 +17,7 @@ class SettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 
     protected function getPackageProviders($app)
@@ -177,6 +177,63 @@ class SettingTest extends TestCase
         $setting->set('app_name', 'Test Application');
 
         $this->assertSame('Test Application', $setting->get('app_name'));
+    }
+
+    /**
+     * @test
+     */
+    public function getValueOfSettingFromDatabaseOfMultiArrayConfig()
+    {
+        config(['setting.field' => ['type' => 'input', 'default_value' => 'not set']]);
+        $cache = Mockery::mock(CacheContract::class);
+        $cache->shouldReceive('has')->andReturn(false);
+        $cache->shouldReceive('add')->andReturn(true);
+
+        $setting = new Setting(new EloquentStorage(), $cache);
+
+        // Get setting from setting config file
+        $this->assertSame('not set', $setting->get('field'));
+
+        $setting->set('field', 'value field overwrite');
+
+        $this->assertSame('value field overwrite', $setting->get('field'));
+        $this->assertArrayHasKey('value', $setting->get('field.'));
+        $this->assertArrayHasKey('default_value', $setting->get('field.'));
+        $this->assertArrayHasKey('type', $setting->get('field.'));
+    }
+
+    /**
+     * @test
+     */
+    public function getAllValuesOfSettingFromDatabaseOfMultiArrayConfig()
+    {
+        config([
+            'setting.fields' => [
+                'field1' => [
+                    'type' => 'input',
+                    'default_value' => 'field 1 not set'
+                ],
+                'field2' => [
+                    'type' => 'input',
+                    'default_value' => 'field 2 not set'
+                ]
+            ]
+        ]);
+        $cache = Mockery::mock(CacheContract::class);
+        $cache->shouldReceive('has')->andReturn(false);
+        $cache->shouldReceive('add')->andReturn(true);
+
+        $setting = new Setting(new EloquentStorage(), $cache);
+
+
+        $setting->set('fields.field1', 'field 1 overwrite');
+
+        $this->assertSame('field 1 overwrite', $setting->get('fields.field1'));
+
+        $this->assertSame('field 1 overwrite', $setting->get('fields.')['field1']['value']);
+        $this->assertArrayHasKey('value', $setting->get('fields.')['field1']);
+        $this->assertArrayHasKey('default_value', $setting->get('fields.')['field1']);
+        $this->assertArrayHasKey('type', $setting->get('fields.')['field1']);
     }
 
     /**

@@ -55,7 +55,11 @@ class Setting
      */
     public function get($key, $default_value = null)
     {
-        if (strpos($key, '.') !== false) {
+        if (substr($key, -1) == '.') {
+            $key = substr($key, 0, -1);
+            $setting = $this->getByKey($key);
+            $setting = $this->mergeValues($key, $setting) ?: $setting;
+        } elseif (strpos($key, '.') !== false) {
             $setting = $this->getSubValue($key);
         } else {
             if ($this->hasByKey($key)) {
@@ -67,6 +71,35 @@ class Setting
         $this->resetLang();
         if (is_null($setting)) {
             $setting = is_null($default_value) ? $this->default($key) : $default_value;
+        }
+
+        return $setting;
+    }
+
+    /**
+     * Recursivly merge array values of a given key with config file values
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function mergeValues($key, $value)
+    {
+        $setting = config('setting.' . $key);
+
+        if (!is_array($setting)) {
+            return false;
+        }
+        if (array_key_exists('default_value', $setting)) {
+            $setting['value'] = $value;
+            return $setting;
+        }
+
+        foreach ($setting as $subkey => $value) {
+            if (array_key_exists('default_value', $value)) {
+                $setting[$subkey]['value'] = $this->get($key . '.' . $subkey);
+            }
         }
 
         return $setting;
