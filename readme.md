@@ -163,7 +163,7 @@ Setting::get('user_' . $otherUser->id);
 ]
 ```
 
-In order to get all user settings you can use the getWithDefaultSubKeys() method or suffix the main key with a dot. The result will return a merged array with the default values from and the config while the changed values from the database will overwrite the default values.
+In order to get all user settings you can use the `getWithDefaultSubKeys()` method or suffix the main key with a dot. The result will return a merged array with the default values from and the config while the changed values from the database will overwrite the default values.
 
 ```php
 Setting::get('user_' . $otherUser->id . '.');
