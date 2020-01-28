@@ -247,6 +247,7 @@ If you discover any security related issues, please send me a DM on Twitter [@ja
 
 This package is mostly a fork of [UniSharp/laravel-settings](https://github.com/UniSharp/laravel-settings)
 
+-   [HelpSpace.io](https://helpspace.io/?ref=laravel-setting)
 -   [Janis Kelemen](https://twitter.com/janiskelemen)
 -   [All Contributors][link-contributors]
 
