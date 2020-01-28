@@ -92,8 +92,9 @@ Setting::get('app_name.max');
 
 ### Get full structure with default_value keys
 
+By suffixing your key name with a dot or by using the `Setting::getWithDefaultSubKeys('app_name')` method will return all default parameters including the current value
+
 ```php
-// By suffixing your key name with a dot or by using the Setting::getWithDefaultSubKeys('app_name') method will return all default parameters including the current value
 Setting::get('app_name.');
 //retruns
 [
