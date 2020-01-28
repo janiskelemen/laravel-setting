@@ -2,7 +2,6 @@
 
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Build Status][ico-travis]][link-travis]
-[![StyleCI][ico-styleci]][link-styleci]
 
 -   Simple key-value storage
 -   Optional config file for default settings supported
@@ -31,6 +30,7 @@ After publishing the setting files you will find a new configuration file: confi
 In this config you can define your basic settings like below.
 
 ```php
+# config/setting.php
 return [
     'app_name' => 'My Application',
     'user_limit' => 10,
@@ -39,12 +39,14 @@ return [
 
 ```php
 Setting::get('app_name');
-//retruns 'My Application'
+//retruns
+'My Application'
 ```
 
 ### You can also use multi level arrays
 
 ```php
+# config/setting.php
 return [
     'priorities' => [
         'low' => 1,
@@ -56,7 +58,8 @@ return [
 
 ```php
 Setting::get('priorities.medium');
-//retruns 2
+//retruns
+2
 ```
 
 ### Defining optional config values
@@ -65,6 +68,7 @@ If you want to store additional data for a particular setting you can do so usin
 'default_value' which will be the default for the setting and is what gets returned by Settings::get('app_name') in this case.
 
 ```php
+# config/setting.php
 return [
     'app_name' => [
         'type' => 'text', /* Optional config values */
@@ -77,48 +81,102 @@ return [
 
 ```php
 Setting::get('app_name');
-//retruns 'My Application'
+//retruns
+'My Application'
 
 // You can still access the optional parameters
-Setting::get('app_name.max')
-//retruns 255
-
-// This will return all parameters including the current value
-Setting::get('app_name.')
+Setting::get('app_name.max');
 //retruns
-//    [
-//        'type' => 'text',
-//        'max' => 255,
-//        'default_value' => 'My Application',
-//        'value' => 'My Custom Application Name' //the value key will be added with the current value saved in the database (or default if not in database yet)
-//    ],
+255
+```
+
+### Get full structure with default_value keys
+
+```php
+// By suffixing your key name with a dot or by using the Setting::getWithDefaultSubKeys('app_name') method will return all default parameters including the current value
+Setting::get('app_name.');
+//retruns
+[
+    'type' => 'text',
+    'max' => 255,
+    'default_value' => 'My Application',
+    'value' => 'My Custom Application Name' //the value key will be added with the current value saved in the database (or default if not in database yet)
+]
 ```
 
 ### Scoped settings
 
-You might want to save some settings only for a certain users. You can do this using a multi array.
-Those setting naturally wont life your config file but can be saved during runtime into the Database.
+You might want to save some settings only for a certain user.
+You can do this using a placeholder (\_\*) inside your config key name.
+
+```php
+# config/setting.php
+return [
+    'user_*' => [
+        'dark_mode' => false,
+        'permissions' => [
+            'read' => true,
+            'write' => false,
+        ]
+    ],
+];
+```
 
 Set save the new setting on runtime:
 
 ```php
-// Save a new setting under user1.dark_mode with a value of true
-Setting::set('user' . $user->id . '.dark_mode', true);
+// Save a new setting under user_1.dark_mode with a value of true
+Setting::set('user_' . $user->id . '.dark_mode', true);
 ```
 
 Now you can get the value:
 
 ```php
-Setting::get('user' . $user->id . '.dark_mode');
-//returns true
+Setting::get('user_' . $user->id . '.dark_mode');
+//returns
+true
 ```
 
 The above will return null if the setting does not exist for this user.
 In order to return something else you can set a default as the second parameter:
 
 ```php
-Setting::get('user' . $otherUser->id . '.dark_mode', false);
-//returns false
+Setting::get('user_' . $otherUser->id . '.dark_mode');
+//returns
+false
+```
+
+Get only the changed user settings
+
+```php
+Setting::set('user_' . $otherUser->id '.dark_mode', true);
+Setting::set('user_' . $otherUser->id '.permissions.write', true);
+
+Setting::get('user_' . $otherUser->id);
+//returns
+[
+    'dark_mode' => true,
+    'permissions' => [
+        'write' => false
+    ]
+]
+```
+
+In order to get all user settings you can use the getWithDefaultSubKeys() method or suffix the main key with a dot. The result will return a merged array with the default values from and the config while the changed values from the database will overwrite the default values.
+
+```php
+Setting::get('user_' . $otherUser->id . '.');
+// same as
+Setting::getWithDefaultSubKeys('user_' . $otherUser->id);
+
+//returns
+[
+    'dark_mode' => true, // this value comes from the database
+    'permissions' => [
+        'read' => true, // this value is the default from the config
+        'write' => false, // this value is the default from the config
+    ]
+]
 ```
 
 ## Usage

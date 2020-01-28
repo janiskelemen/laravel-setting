@@ -37,11 +37,47 @@ class Setting
     /**
      * Get default values from setting config file.
      *
-     * @return void
+     * @return string
      */
-    public function default($key)
+    public function
+    default($key)
     {
-        return is_array(config('setting.'.$key)) ? config('setting.'.$key.'.default_value', config('setting.'.$key)) : config('setting.'.$key);
+        $key = $this->dynamic_key($key);
+        return is_array(config('setting.' . $key)) ? config('setting.' . $key . '.default_value', config('setting.' . $key)) : config('setting.' . $key);
+    }
+
+    /**
+     * Check if the first key is present as dynamic inside the config.
+     * For example: 
+     * Setting::get('user_1.dark_mode'); 
+     * Will return the default from the config named user_*.dark_mode if 
+     * no value is set for the user with id 1.
+     * @return string
+     */
+    public function dynamic_key($key)
+    {
+        $firstPartOfKey = explode('.', $key)[0];
+        $endOfFirstKeyIsNumber = is_numeric(substr($firstPartOfKey, -1));
+        $keyHasSeparator = isset(explode('_', $firstPartOfKey)[1]);
+
+        if ($keyHasSeparator && $endOfFirstKeyIsNumber) {
+            $dynamicKey = explode('_', $firstPartOfKey)[0] . '_*';
+            $key = config('setting.' . $dynamicKey) ? str_replace($firstPartOfKey, $dynamicKey, $key) : $key;
+        }
+        return $key;
+    }
+
+    /**
+     * Return setting with all default sub keys.
+     *
+     * @param string $key
+     * @param string $value
+     *
+     * @return string|null
+     */
+    public function getWithDefaultSubKeys($key, $default_value = null)
+    {
+        return $this->get($key . '.', $default_value);
     }
 
     /**
@@ -83,24 +119,34 @@ class Setting
      *
      * @return void
      */
-    public function mergeValues($key, $value)
+    public function mergeValues($mainkey, $value)
     {
-        $setting = config('setting.'.$key);
+        $setting = config('setting.' . $this->dynamic_key($mainkey));
 
-        if (! is_array($setting)) {
+        if (!is_array($setting)) {
             return false;
         }
         if (array_key_exists('default_value', $setting)) {
             $setting['value'] = $value;
-
             return $setting;
         }
 
-        foreach ($setting as $subkey => $value) {
-            if (array_key_exists('default_value', $value)) {
-                $setting[$subkey]['value'] = $this->get($key.'.'.$subkey);
+        $dot = new \Adbar\Dot($setting);
+
+        foreach ($dot->flatten() as $key => $value) {
+            $keyParts = explode('.', $key);
+            $lastKey = end($keyParts);
+
+            if ($lastKey == 'default_value') {
+                $parentKey = str_replace('.default_value', '', $key);
+                $newValueKey = $parentKey . '.value';
+                $dot->set($newValueKey, $this->get($mainkey . '.' . $parentKey, $value));
+            } else {
+                $dot->set($key, $this->get($mainkey . '.' . $key, $value));
             }
         }
+
+        $setting = $dot->all();
 
         return $setting;
     }
@@ -210,18 +256,18 @@ class Setting
         } else {
             $main_key = $key;
         }
-        if ($this->cache->has($main_key.'@'.$this->lang)) {
-            $setting = $this->cache->get($main_key.'@'.$this->lang);
+        if ($this->cache->has($main_key . '@' . $this->lang)) {
+            $setting = $this->cache->get($main_key . '@' . $this->lang);
         } else {
             $setting = $this->storage->retrieve($main_key, $this->lang);
-            if (! is_null($setting)) {
+            if (!is_null($setting)) {
                 $setting = $setting->value;
             }
             $setting_array = json_decode($setting, true);
             if (is_array($setting_array)) {
                 $setting = $setting_array;
             }
-            $this->cache->add($main_key.'@'.$this->lang, $setting, 60);
+            $this->cache->add($main_key . '@' . $this->lang, $setting, 60);
         }
 
         return $setting;
@@ -238,8 +284,8 @@ class Setting
         } else {
             $this->storage->store($main_key, $value, $this->lang);
         }
-        if ($this->cache->has($main_key.'@'.$this->lang)) {
-            $this->cache->forget($main_key.'@'.$this->lang);
+        if ($this->cache->has($main_key . '@' . $this->lang)) {
+            $this->cache->forget($main_key . '@' . $this->lang);
         }
     }
 
@@ -254,8 +300,8 @@ class Setting
         if (strpos($key, '.') !== false) {
             $setting = $this->getSubValue($key);
         } else {
-            if ($this->cache->has($key.'@'.$this->lang)) {
-                $setting = $this->cache->get($key.'@'.$this->lang);
+            if ($this->cache->has($key . '@' . $this->lang)) {
+                $setting = $this->cache->get($key . '@' . $this->lang);
             } else {
                 $setting = $this->storage->retrieve($key, $this->lang);
             }
@@ -273,7 +319,7 @@ class Setting
     protected function forgetByKey($key)
     {
         $this->storage->forget($key, $this->lang);
-        $this->cache->forget($key.'@'.$this->lang);
+        $this->cache->forget($key . '@' . $this->lang);
     }
 
     /**

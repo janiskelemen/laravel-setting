@@ -17,7 +17,7 @@ class SettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 
     protected function getPackageProviders($app)
@@ -233,6 +233,45 @@ class SettingTest extends TestCase
         $this->assertArrayHasKey('value', $setting->get('fields.')['field1']);
         $this->assertArrayHasKey('default_value', $setting->get('fields.')['field1']);
         $this->assertArrayHasKey('type', $setting->get('fields.')['field1']);
+    }
+
+    /**
+     * @test
+     */
+    public function getAllValuesOfSettingFromDatabaseOfDynamicArrayConfig()
+    {
+        config([
+            'setting.user_*' => [
+                'permissions' => [
+                    'read' => true,
+                    'write' => false,
+                ],
+                'language' => 'en',
+                'dark_mode' => true
+            ],
+        ]);
+        $cache = Mockery::mock(CacheContract::class);
+        $cache->shouldReceive('has')->andReturn(false);
+        $cache->shouldReceive('add')->andReturn(true);
+
+        $setting = new Setting(new EloquentStorage(), $cache);
+
+        $this->assertSame($setting->get('user_1.permissions.read'), true);
+        $this->assertSame($setting->get('user_1.language'), 'en');
+
+        $setting->set('user_1.permissions.write', true);
+
+        $this->assertSame($setting->get('user_1.permissions.write'), true);
+        $this->assertSame($setting->get('user_1.permissions.read'), true);
+
+        $setting->set('user_1.permissions.read', false);
+        $setting->set('user_1.language', 'de');
+
+        $this->assertSame($setting->get('user_1.permissions.read'), false);
+        $this->assertSame($setting->get('user_1.language'), 'de');
+
+        $this->assertArrayHasKey('dark_mode', $setting->getWithDefaultSubKeys('user_1'));
+        $this->assertArrayHasKey('dark_mode', $setting->get('user_1.'));
     }
 
     /**
