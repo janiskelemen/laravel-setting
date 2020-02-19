@@ -8,6 +8,7 @@
 -   Support multi-level array (dot delimited keys) structure
 -   Supports storing individual user settings
 -   Localization supported
+-   Settings are cached
 
 ## Installation
 
