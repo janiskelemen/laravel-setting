@@ -127,13 +127,13 @@ Set save the new setting on runtime:
 
 ```php
 // Save a new setting under user_1.dark_mode with a value of true
-Setting::set('user_' . $user->id . '.dark_mode', true);
+Setting::set("user_{$user->id}.dark_mode", true);
 ```
 
 Now you can get the value:
 
 ```php
-Setting::get('user_' . $user->id . '.dark_mode');
+Setting::get("user_{$user->id}.dark_mode");
 //returns
 true
 ```
@@ -142,7 +142,7 @@ The above will return null if the setting does not exist for this user.
 In order to return something else you can set a default as the second parameter:
 
 ```php
-Setting::get('user_' . $otherUser->id . '.dark_mode');
+Setting::get("user_{$otherUser->id}.dark_mode");
 //returns
 false
 ```
@@ -150,10 +150,10 @@ false
 Get only the changed user settings
 
 ```php
-Setting::set('user_' . $otherUser->id '.dark_mode', true);
-Setting::set('user_' . $otherUser->id '.permissions.write', true);
+Setting::set("user_{$otherUser->id}.dark_mode", true);
+Setting::set("user_{$otherUser->id}.permissions.write", true);
 
-Setting::get('user_' . $otherUser->id);
+Setting::get("user_{$otherUser->id}");
 //returns
 [
     'dark_mode' => true,
@@ -166,9 +166,9 @@ Setting::get('user_' . $otherUser->id);
 In order to get all user settings you can use the `getWithDefaultSubKeys()` method or suffix the main key with a dot. The result will return a merged array with the default values from and the config while the changed values from the database will overwrite the default values.
 
 ```php
-Setting::get('user_' . $otherUser->id . '.');
+Setting::get("user_{$otherUser->id}.");
 // same as
-Setting::getWithDefaultSubKeys('user_' . $otherUser->id);
+Setting::getWithDefaultSubKeys("user_{$otherUser->id}");
 
 //returns
 [
