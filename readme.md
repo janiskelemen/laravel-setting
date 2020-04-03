@@ -226,6 +226,17 @@ By default language parameter are being resets every set or get calls. You could
 Setting::lang(App::getLocale())->langResetting(false);
 ```
 
+## Custom Setting Model
+
+The Setting model can be overwritten by creating a /config/laravel-setting.php config and adding:
+
+```php
+'model' => \App\YourModelName::class,
+```
+
+Your custom model needs to extend the **\JanisKelemen\Setting\EloquentStorage** class.
+
+
 ## Change log
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.
