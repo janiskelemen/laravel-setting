@@ -34,8 +34,9 @@ class SettingServiceProvider extends ServiceProvider
             __DIR__.'/../../config/setting.php',
         'setting'
         );
+        $settingModel = config('laravel-setting.model', \JanisKelemen\Setting\EloquentStorage::class);
         // Register the service the package provides.
         $this->app->bind('Setting', \JanisKelemen\Setting\Setting::class);
-        $this->app->bind(\JanisKelemen\Setting\Contracts\SettingStorageContract::class, \JanisKelemen\Setting\EloquentStorage::class);
+        $this->app->bind(\JanisKelemen\Setting\Contracts\SettingStorageContract::class, $settingModel);
     }
 }
