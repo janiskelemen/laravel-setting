@@ -19,7 +19,7 @@
         "JanisKelemen"
     ],
     "require": {
-        "illuminate/support": "^9",
+        "illuminate/support": "^8|^9",
         "adbario/php-dot-notation": "^3.1.1"
     },
     "require-dev": {
