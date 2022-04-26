@@ -4,6 +4,7 @@ namespace JanisKelemen\Setting;
 
 use Illuminate\Contracts\Cache\Factory as CacheContract;
 use JanisKelemen\Setting\Contracts\SettingStorageContract;
+use Illuminate\Support\Arr;
 
 class Setting
 {
@@ -126,7 +127,7 @@ class Setting
         if (!is_array($setting)) {
             return false;
         }
-        if (array_key_exists('default_value', $setting)) {
+        if (Arr::exists($setting, 'default_value')) {
             $setting['value'] = $value;
             return $setting;
         }
@@ -332,7 +333,7 @@ class Setting
     {
         $setting = $this->getByKey($key);
         $subkey = $this->removeMainKey($key);
-        $setting = array_get($setting, $subkey);
+        $setting = Arr::get($setting, $subkey);
 
         return $setting;
     }
@@ -347,7 +348,7 @@ class Setting
     {
         $setting = $this->getByKey($key);
         $subkey = $this->removeMainKey($key);
-        array_set($setting, $subkey, $new_value);
+        Arr::set($setting, $subkey, $new_value);
         $this->setByKey($key, $setting);
     }
 
@@ -361,7 +362,7 @@ class Setting
     {
         $setting = $this->getByKey($key);
         $subkey = $this->removeMainKey($key);
-        array_forget($setting, $subkey);
+        Arr::forget($setting, $subkey);
         $this->setByKey($key, $setting);
     }
 
