@@ -113,6 +113,23 @@ class Setting
     }
 
     /**
+     * Returns the data in value field only
+     *
+     * @param string $key
+     * @param string $value
+     * @return void
+     */
+    public function getValuesOnly($key, $default_value = null)
+    {
+        $values = $this->get($key, $default_value);
+        return collect($values)->map(function ($item, $key) {
+            if (array_key_exists('value', $item)) {
+                return $item['value'];
+            }
+        })->all();
+    }
+
+    /**
      * Recursivly merge array values of a given key with config file values.
      *
      * @param string $key
