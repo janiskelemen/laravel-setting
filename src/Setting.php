@@ -123,9 +123,10 @@ class Setting
     {
         $values = $this->get($key, $default_value);
         return collect($values)->map(function ($item, $key) {
-            if (array_key_exists('value', $item)) {
+            if (is_array($item) && array_key_exists('value', $item)) {
                 return $item['value'];
             }
+            return $item;
         })->all();
     }
 
