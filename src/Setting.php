@@ -2,6 +2,7 @@
 
 namespace JanisKelemen\Setting;
 
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Contracts\Cache\Factory as CacheContract;
 use JanisKelemen\Setting\Contracts\SettingStorageContract;
 use Illuminate\Support\Arr;
@@ -31,6 +32,8 @@ class Setting
             return is_array($item) && isset($item['default_value']) ? $item['default_value'] : $item;
         });
         $all = $this->storage->whereLocale(null)->get()->pluck('value', 'key');
+        
+        Facade::clearResolvedInstance('Setting');
 
         return collect($all)->union($configSettings);
     }
@@ -108,6 +111,8 @@ class Setting
         if (is_null($setting)) {
             $setting = is_null($default_value) ? $this->default($key) : $default_value;
         }
+        
+        Facade::clearResolvedInstance('Setting');
 
         return $setting;
     }
@@ -166,6 +171,8 @@ class Setting
         }
 
         $setting = $dot->all();
+        
+        Facade::clearResolvedInstance('Setting');
 
         return $setting;
     }
@@ -186,6 +193,8 @@ class Setting
             $this->setByKey($key, $value);
         }
         $this->resetLang();
+        
+        Facade::clearResolvedInstance('Setting');
     }
 
     /**
