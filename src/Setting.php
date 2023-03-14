@@ -89,20 +89,21 @@ class Setting
      *
      * @param string $key
      * @param string $value
+     * @param bool $skip_cache
      *
      * @return string|null
      */
-    public function get($key, $default_value = null)
+    public function get($key, $default_value = null, $skip_cache = false)
     {
         if (substr($key, -1) == '.') {
             $key = substr($key, 0, -1);
-            $setting = $this->getByKey($key);
+            $setting = $this->getByKey($key, $skip_cache);
             $setting = $this->mergeValues($key, $setting) ?: $setting;
         } elseif (strpos($key, '.') !== false) {
-            $setting = $this->getSubValue($key);
+            $setting = $this->getSubValue($key, $skip_cache);
         } else {
             if ($this->hasByKey($key)) {
-                $setting = $this->getByKey($key);
+                $setting = $this->getByKey($key, $skip_cache);
             } else {
                 $setting = $default_value;
             }
@@ -277,14 +278,14 @@ class Setting
         return $this;
     }
 
-    protected function getByKey($key)
+    protected function getByKey($key, $skip_cache = false)
     {
         if (strpos($key, '.') !== false) {
             $main_key = explode('.', $key)[0];
         } else {
             $main_key = $key;
         }
-        if ($this->cache->has($main_key . '@' . $this->lang)) {
+        if (!$skip_cache && $this->cache->has($main_key . '@' . $this->lang)) {
             $setting = $this->cache->get($main_key . '@' . $this->lang);
         } else {
             $setting = $this->storage->retrieve($main_key, $this->lang);
@@ -356,9 +357,9 @@ class Setting
      * @param string $key
      * @return void
      */
-    protected function getSubValue($key)
+    protected function getSubValue($key, $skip_cache = false)
     {
-        $setting = $this->getByKey($key);
+        $setting = $this->getByKey($key, $skip_cache);
         $subkey = $this->removeMainKey($key);
         $setting = Arr::get($setting, $subkey);
 
