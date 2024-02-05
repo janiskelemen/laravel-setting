@@ -32,7 +32,7 @@ class Setting
             return is_array($item) && isset($item['default_value']) ? $item['default_value'] : $item;
         });
         $all = $this->storage->whereLocale(null)->get()->pluck('value', 'key');
-        
+
         Facade::clearResolvedInstance('Setting');
 
         return collect($all)->union($configSettings);
@@ -43,8 +43,7 @@ class Setting
      *
      * @return string
      */
-    public function
-    default($key)
+    public function default($key)
     {
         $key = $this->dynamic_key($key);
         return is_array(config('setting.' . $key)) ? config('setting.' . $key . '.default_value', config('setting.' . $key)) : config('setting.' . $key);
@@ -52,9 +51,9 @@ class Setting
 
     /**
      * Check if the first key is present as dynamic inside the config.
-     * For example: 
-     * Setting::get('user_1.dark_mode'); 
-     * Will return the default from the config named user_*.dark_mode if 
+     * For example:
+     * Setting::get('user_1.dark_mode');
+     * Will return the default from the config named user_*.dark_mode if
      * no value is set for the user with id 1.
      * @return string
      */
@@ -112,7 +111,7 @@ class Setting
         if (is_null($setting)) {
             $setting = is_null($default_value) ? $this->default($key) : $default_value;
         }
-        
+
         Facade::clearResolvedInstance('Setting');
 
         return $setting;
@@ -127,7 +126,7 @@ class Setting
      */
     public function getValuesOnly($key, $default_value = null)
     {
-        $values = $this->get($key, $default_value);
+        $values = $this->get($key, $default_value, true);
         return collect($values)->map(function ($item, $key) {
             if (is_array($item) && array_key_exists('value', $item)) {
                 return $item['value'];
@@ -165,14 +164,14 @@ class Setting
             if ($lastKey == 'default_value') {
                 $parentKey = str_replace('.default_value', '', $key);
                 $newValueKey = $parentKey . '.value';
-                $dot->set($newValueKey, $this->get($mainkey . '.' . $parentKey, $value));
+                $dot->set($newValueKey, $this->get($mainkey . '.' . $parentKey, $value, true));
             } else {
-                $dot->set($key, $this->get($mainkey . '.' . $key, $value));
+                $dot->set($key, $this->get($mainkey . '.' . $key, $value, true));
             }
         }
 
         $setting = $dot->all();
-        
+
         Facade::clearResolvedInstance('Setting');
 
         return $setting;
@@ -194,7 +193,7 @@ class Setting
             $this->setByKey($key, $value);
         }
         $this->resetLang();
-        
+
         Facade::clearResolvedInstance('Setting');
     }
 
@@ -327,7 +326,7 @@ class Setting
     protected function hasByKey($key)
     {
         if (strpos($key, '.') !== false) {
-            $setting = $this->getSubValue($key);
+            $setting = $this->getSubValue($key, true);
         } else {
             if ($this->cache->has($key . '@' . $this->lang)) {
                 $setting = $this->cache->get($key . '@' . $this->lang);
@@ -374,7 +373,7 @@ class Setting
      */
     protected function setSubValue($key, $new_value)
     {
-        $setting = $this->getByKey($key);
+        $setting = $this->getByKey($key, true);
         $subkey = $this->removeMainKey($key);
         Arr::set($setting, $subkey, $new_value);
         $this->setByKey($key, $setting);
@@ -388,7 +387,7 @@ class Setting
      */
     protected function forgetSubKey($key)
     {
-        $setting = $this->getByKey($key);
+        $setting = $this->getByKey($key, true);
         $subkey = $this->removeMainKey($key);
         Arr::forget($setting, $subkey);
         $this->setByKey($key, $setting);
